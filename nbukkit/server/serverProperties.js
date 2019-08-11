@@ -14,5 +14,6 @@ module.exports = {
     "onlineMode": true,
     "maxBuildHeight": 256,
     "levelSeed": "",
-    "motd": "NBukkit Minecraft Server"
+    "motd": "NBukkit Minecraft Server",
+    "version": "1.8.8"
 }

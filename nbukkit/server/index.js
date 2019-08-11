@@ -2,27 +2,35 @@ const mc = require('minecraft-protocol');
 const fs = require('fs');
 const Chunk = require('prismarine-chunk')('1.8');
 const Vec3 = require('vec3');
+const Properties = require("./serverProperties.js")
 
 
-var server = mc.createServer({
-  'online-mode': true,
-  encryption: true,
-  host: 'localhost',
-  port: 25565,
-  version: '1.8.8'
-})
+class Server {
+    constructor() {
+        console.log("Init Server with Port: " + Properties.serverPort);
+        this.mc = mc.createServer({
+            "online-mode": Properties.onlineMode,
+            host: Properties.serverIp,
+            port: Properties.serverPort,
+            version: Properties.version
+        });
+    }
+}
+
+const server = new Server();
+
 var chunk = new Chunk()
 
-for (var x = 0; x < 16; x++) {
-  for (var z = 0; z < 16; z++) {
+for(let x = 0; x < 16; x++){
+  for(let z = 0; z < 16; z++){
     chunk.setBlockType(new Vec3(x, 100, z), 2)
-    for (var y = 0; y < 256; y++) {
+    for(let y = 0; y < 256; y++){
       chunk.setSkyLight(new Vec3(x, y, z), 15)
     }
   }
 }
 
-server.on('login', function (client) {
+server.mc.on('login', function (client) {
   client.write('login', {
     entityId: client.id,
     levelType: 'default',
