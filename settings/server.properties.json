@@ -1,0 +1,18 @@
+{
+    "gamemode": 0,
+    "difficulty": 0,
+    "spawn-monsters": true,
+    "pvp": true,
+    "level-type": "DEFAULT",
+    "enable-command-block": true,
+    "server-port": 25565,
+    "server-ip": "localhost",
+    "spawn-npcs": false,
+    "allow-flight": false,
+    "level-name": "world",
+    "whitelist": false,
+    "online-mode": true,
+    "max-build-height": 256,
+    "level-seed": "",
+    "motd": "NBukkit Minecraft Server"
+}
