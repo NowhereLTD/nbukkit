@@ -1,7 +1,7 @@
 {
   "name": "minecraftnodeserver",
   "version": "1.0.0",
-  "description": "",
+  "description": "A nodeJS minecraft server",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -10,5 +10,13 @@
   "license": "ISC",
   "dependencies": {
     "minecraft-protocol": "^1.9.4"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/prooxeydev/nbukkit.git"
+  },
+  "bugs": {
+    "url": "https://github.com/prooxeydev/nbukkit/issues"
+  },
+  "homepage": "https://github.com/prooxeydev/nbukkit#readme"
 }
