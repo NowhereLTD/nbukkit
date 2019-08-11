@@ -24,7 +24,7 @@ module.export = class Server {
         this.mc.close();
     }
 
-    #startWorldGeneration() {
+    startWorldGeneration() {
         this.chunk = new Chunk()
 
         for(let x = 0; x < 16; x++){
@@ -37,7 +37,7 @@ module.export = class Server {
         }
     }
 
-    #defaultListener() {
+    defaultListener() {
         this.registerListener('login', function (client) {
           client.write('login', {
             entityId: client.id,
