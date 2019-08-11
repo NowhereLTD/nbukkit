@@ -8,7 +8,7 @@ module.exports = class Properties{
     load(path){
         this.path = path;
         if(this.path){
-            this.data = fs.readFileSync(path);
+            this.data = JSON.parse(fs.readFileSync(path));
         }
         return this.data;
     }

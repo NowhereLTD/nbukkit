@@ -3,6 +3,7 @@ const Properties = require("./serverProperties.js");
 const Server = require('./server.js');
 
 const serverProperties = new Properties();
-serverProperties.load('./etc/server.properties');
-const server = new Server(serverProperties);
+serverProperties.load('./nbukkit/server/etc/server.properties');
+
+const server = new Server(serverProperties.data);
 server.startServer();
