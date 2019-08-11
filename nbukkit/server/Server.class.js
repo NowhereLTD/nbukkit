@@ -1,12 +1,13 @@
 const mc = require('minecraft-protocol');
 const Chunk = require('prismarine-chunk')('1.8');
 const Vec3 = require('vec3');
-const GrasBlock = require("./modules/block/GrasBlock.class.js");
+const Player = require('./Player.class.js');
 
 module.exports = class Server {
 
     constructor(properties) {
         this.properties = properties;
+        this.clients = [];
     }
 
 
@@ -35,13 +36,7 @@ module.exports = class Server {
 
         for (let x = 0; x < 16; x++) {
             for (let z = 0; z < 16; z++) {
-
-                let cacheBlock = new GrasBlock();
-                cacheBlock.position.x = x;
-                cacheBlock.position.y = 100;
-                cacheBlock.position.z = z;
-
-                this.chunk.setBlockType(cacheBlock.position, cacheBlock.type);
+                this.chunk.setBlockType(new Vec3(x, 100, z), 2)
                 for (let y = 0; y < 256; y++) {
                     this.chunk.setSkyLight(new Vec3(x, y, z), 15)
                 }
@@ -50,7 +45,9 @@ module.exports = class Server {
     }
 
     defaultListener() {
-        this.registerListener('login', function(client) {
+        this.registerListener('login', function (client) {
+            
+            console.log(client.profile);
             client.write('login', {
                 entityId: client.id,
                 levelType: 'default',
@@ -59,7 +56,7 @@ module.exports = class Server {
                 difficulty: 2,
                 maxPlayers: this.properties.maxPlayers,
                 reducedDebugInfo: false
-            })
+            });
             client.write('map_chunk', {
                 x: 0,
                 z: 0,
@@ -67,7 +64,7 @@ module.exports = class Server {
                 bitMap: 0xffff,
                 chunkData: this.chunk.dump(),
                 blockEntities: []
-            })
+            });
             client.write('position', {
                 x: 15,
                 y: 101,
@@ -75,7 +72,7 @@ module.exports = class Server {
                 yaw: 137,
                 pitch: 0,
                 flags: 0x00
-            })
+            });
         }.bind(this))
     }
 
