@@ -7,7 +7,7 @@ module.exports = class Server {
 
     constructor(properties) {
         this.properties = properties;
-        this.clients = [];
+        
     }
 
 
@@ -46,38 +46,8 @@ module.exports = class Server {
 
     defaultListener() {
         this.registerListener('login', function (client) {
-            
-            console.log(client.profile);
-            client.write('login', {
-                entityId: client.id,
-                levelType: 'default',
-                gameMode: 0,
-                dimension: 0,
-                difficulty: 2,
-                maxPlayers: this.properties.maxPlayers,
-                reducedDebugInfo: false
-            });
-            client.write('map_chunk', {
-                x: 0,
-                z: 0,
-                groundUp: true,
-                bitMap: 0xffff,
-                chunkData: this.chunk.dump(),
-                blockEntities: []
-            });
-            client.write('position', {
-                x: 15,
-                y: 101,
-                z: 15,
-                yaw: 137,
-                pitch: 0,
-                flags: 0x00
-            });
+            this.clients.push(new Player(client, this, new Vec3(15, 101, 15)));
         }.bind(this))
-    }
-
-    registerListener(key, action) {
-        this.mc.on(key, action);
     }
 
 }
