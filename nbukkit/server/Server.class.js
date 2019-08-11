@@ -1,6 +1,7 @@
 const mc = require('minecraft-protocol');
 const Chunk = require('prismarine-chunk')('1.8');
 const Vec3 = require('vec3');
+const GrasBlock = require("./modules/block/GrasBlock.class.js");
 
 module.exports = class Server {
 
@@ -34,7 +35,13 @@ module.exports = class Server {
 
         for (let x = 0; x < 16; x++) {
             for (let z = 0; z < 16; z++) {
-                this.chunk.setBlockType(new Vec3(x, 100, z), 2)
+
+                let cacheBlock = new GrasBlock();
+                cacheBlock.position.x = x;
+                cacheBlock.position.y = 100;
+                cacheBlock.position.z = z;
+
+                this.chunk.setBlockType(cacheBlock.position, cacheBlock.type);
                 for (let y = 0; y < 256; y++) {
                     this.chunk.setSkyLight(new Vec3(x, y, z), 15)
                 }

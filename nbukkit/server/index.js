@@ -1,6 +1,6 @@
 const fs = require('fs');
-const Properties = require("./serverProperties.js");
-const Server = require('./server.js');
+const Properties = require("./Properties.class.js");
+const Server = require('./Server.class.js');
 
 const serverProperties = new Properties();
 serverProperties.load('./nbukkit/server/etc/server.properties');
