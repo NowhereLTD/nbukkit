@@ -7,3 +7,5 @@ serverProperties.load('./nbukkit/server/etc/server.properties');
 
 const server = new Server(serverProperties.data);
 server.startServer();
+
+module.export = server;

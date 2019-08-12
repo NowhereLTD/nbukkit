@@ -12,4 +12,4 @@ module.exports = class Properties{
         }
         return this.data;
     }
-}
+};

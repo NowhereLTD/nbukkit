@@ -1,19 +1,22 @@
 const mc = require('minecraft-protocol');
 const Chunk = require('prismarine-chunk')('1.8');
 const Vec3 = require('vec3');
-const Player = require('./Player.class.js');
+const ConnectionManager = require('./modules/connection/ConnectionManager.class.js');
+const WorldManager = require('./modules/worlds/WorldManager.class.js');
+const EntityManager = require('./modules/entity/EntityManager.class');
+const ChatManager = require('./modules/chat/ChatManager.class');
 
 module.exports = class Server {
 
     constructor(properties) {
         this.properties = properties;
-        
     }
 
 
     startServer() {
         console.log("Init Server with Port: " + this.properties.serverPort);
         console.log("Server runs in" + this.properties.onlineMode ? "onlineMode" : "offlineMode");
+        console.log("Default Gamemode: " + this.properties.gamemode);
         this.mc = mc.createServer({
             "online-mode": this.properties.onlineMode,
             host: this.properties.serverIp,
@@ -21,8 +24,13 @@ module.exports = class Server {
             version: this.properties.version
         });
 
+        this.connectionManager = new ConnectionManager(this);
+        this.worldManager = new WorldManager(this);
+        this.entityManager = new EntityManager(this);
+        this.chatManager = new ChatManager(this);
+
         this.startWorldGeneration();
-        this.defaultListener();
+        //this.defaultListener();
     }
 
 
@@ -32,7 +40,7 @@ module.exports = class Server {
 
 
     startWorldGeneration() {
-        this.chunk = new Chunk()
+        this.chunk = new Chunk();
 
         for (let x = 0; x < 16; x++) {
             for (let z = 0; z < 16; z++) {
@@ -43,11 +51,11 @@ module.exports = class Server {
             }
         }
     }
-
+/*
     defaultListener() {
         this.registerListener('login', function (client) {
             this.clients.push(new Player(client, this, new Vec3(15, 101, 15)));
         }.bind(this))
-    }
+    }*/
 
-}
+};
