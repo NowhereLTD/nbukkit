@@ -21,7 +21,8 @@ module.exports = class Server {
             "online-mode": this.properties.onlineMode,
             host: this.properties.serverIp,
             port: this.properties.serverPort,
-            version: this.properties.version
+            version: this.properties.version,
+            motd: this.properties.motd
         });
 
         this.connectionManager = new ConnectionManager(this);
