@@ -141,6 +141,12 @@ module.exports = class ConnectionPlayer {
                 case 'entity_action':
                     this.receiveEntityAction(data);
                     break;
+                case 'arm_animation':
+                    this.player.nearbyPlayer.forEach(p => p.connection.sendPacket('animation', {
+                       entityId: this.player.entityId,
+                        animation: 0
+                    }));
+                    break;
                 default:
                     break;
             }
@@ -225,7 +231,7 @@ module.exports = class ConnectionPlayer {
         }
 
         if(packetName !== undefined) {
-            if(packetName === 'entity_look') {
+            if(packetName === 'entity_look' || 'entity_move_look') {
                 let rotData = {
                     entityId: this.player.entityId,
                     headYaw: this.convAngle(data.yaw)
