@@ -231,7 +231,7 @@ module.exports = class ConnectionPlayer {
         }
 
         if(packetName !== undefined) {
-            if(packetName === 'entity_look' || 'entity_move_look') {
+            if(packetName === 'entity_look' || packetName === 'entity_move_look') {
                 let rotData = {
                     entityId: this.player.entityId,
                     headYaw: this.convAngle(data.yaw)
