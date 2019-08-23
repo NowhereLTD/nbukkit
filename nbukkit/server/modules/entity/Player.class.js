@@ -1,5 +1,6 @@
 const mc = require('minecraft-protocol');
 const Vec3 = require('vec3');
+const Inventory = require('../inventory/Inventory.class.js');
 
 module.exports = class Player {
 
@@ -12,6 +13,7 @@ module.exports = class Player {
         this.entityId = connectionPlayer.client.id;
         this.gamemode = 0;
         this.displayname = this.name;
+        this.inventory = new Inventory(36, this);
         this.nearbyPlayer = [];
         this.spawnedPlayer = [];
     }
