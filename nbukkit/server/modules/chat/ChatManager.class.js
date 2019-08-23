@@ -5,7 +5,7 @@ module.exports = class ChatManager {
     }
 
     onMessage(message, player) {
-        if(message[0] === "/") {
+        if(message[0] === this.server.properties.commands.prefix) {
             //command
         } else {
             let msg = this.server.properties.messages.chatMessageTemplate.replace(/%p%/g, player.displayname);
@@ -25,9 +25,7 @@ module.exports = class ChatManager {
 
     sendJoinMessage(joinedPlayer) {
         let msg = this.server.properties.messages.joinMessageTemplate.replace(/%p%/g, joinedPlayer.displayname);
-        this.server.entityManager.players.forEach((p) => {
-            p.connection.sendMessage(msg);
-        });
+        sendMessageToAll(msg);
     }
 
     sendLeaveMessage(leavedPlayer) {
