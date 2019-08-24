@@ -12,8 +12,14 @@ module.exports = class Server {
     constructor(properties) {
         this.properties = properties;
         this.data = [];
+        this.chunkList = [];
         let generator = new WorldGenerator(this);
-        generator.generateChunk(0, 0);
+        for(let i1=0; i1<16; i1++){
+            for(let i2=0; i2<16; i2++){
+                generator.generateChunk(i1, i2);
+            }
+        }
+
     }
 
 
@@ -46,19 +52,36 @@ module.exports = class Server {
 
     startWorldGeneration() {
 
-        this.chunk = new Chunk();
+        for(let chunkX = 0; chunkX<this.data.length; chunkX++){
+            if(!this.chunkList[chunkX]){
+                this.chunkList[chunkX] = [];
+            }
+            for(let chunkZ = 0; chunkZ<this.data[chunkX].length; chunkZ++){
+                let chunk = new Chunk();
 
-        for (let x = 0; x < 16; x++) {
-            for (let z = 0; z < 16; z++) {
-                for(let y = 0; y < this.data[x][z]; y++) {
-                    this.chunk.setBlockType(new Vec3(x, y, z), 1);
+                for (let x = 0; x < 16; x++) {
+                    for (let z = 0; z < 16; z++) {
+                        for(let y = 0; y <= this.data[chunkX][chunkZ][x][z]; y++) {
+                            if(y == this.data[chunkX][chunkZ][x][z]){
+                                chunk.setBlockType(new Vec3(x, y, z), 2);
+                            }else if(y > this.data[chunkX][chunkZ][x][z] - 4){
+                                chunk.setBlockType(new Vec3(x, y, z), 3);
+                            }else{
+                                chunk.setBlockType(new Vec3(x, y, z), 1);
+                            }
+                        }
+
+                        for (let y = 0; y < 256; y++) {
+                            chunk.setSkyLight(new Vec3(x, y, z), 15)
+                        }
+                    }
                 }
 
-                for (let y = 0; y < 256; y++) {
-                    this.chunk.setSkyLight(new Vec3(x, y, z), 15)
-                }
+                this.chunkList[chunkX][chunkZ] = chunk;
+
             }
         }
+
     }
 /*
     defaultListener() {

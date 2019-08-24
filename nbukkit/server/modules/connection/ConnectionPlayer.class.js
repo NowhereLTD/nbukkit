@@ -17,14 +17,19 @@ module.exports = class ConnectionPlayer {
             maxPlayers: this.player.server.properties.maxPlayers,
             reducedDebugInfo: false
         });
-        this.sendPacket("map_chunk", {
-            x: 0,
-            z: 0,
-            groundUp: true,
-            bitMap: 0xffff,
-            chunkData: this.player.server.chunk.dump(),
-            blockEntities: []
-        });
+        for(let chunkX = 0; chunkX<this.player.server.chunkList.length; chunkX++){
+            for(let chunkZ = 0; chunkZ<this.player.server.chunkList[chunkX].length; chunkZ++){
+                this.sendPacket("map_chunk", {
+                    x: chunkX,
+                    z: chunkZ,
+                    groundUp: true,
+                    bitMap: 0xffff,
+                    chunkData: this.player.server.chunkList[chunkX][chunkZ].dump(),
+                    blockEntities: []
+                });
+            }
+        }
+
         this.sendPacket("position", {
             x: this.player.location.x,
             y: this.player.location.y,
