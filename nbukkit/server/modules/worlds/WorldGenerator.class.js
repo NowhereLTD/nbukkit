@@ -21,7 +21,10 @@ class WorldGenerator{
             this.server.data[chunkX][chunkZ][x] = [];
             for(let z=0; z<16; z++){
                 let absZ = chunkZ * 16 + z;
-                let test = this.simplex.noise2D(this.smooth*(absX/16-0.5), this.smooth*(absZ/16-0.5));
+                let test =
+                    1 * this.simplex.noise2D(1 * (this.smooth*(absX/16-0.5)), 1 * (this.smooth*(absZ/16-0.5))) +
+                    0.5 * this.simplex.noise2D(2 * (this.smooth*(absX/16-0.5)), 2 * (this.smooth*(absZ/16-0.5))) +
+                    0.25 * this.simplex.noise2D(4 * (this.smooth*(absX/16-0.5)), 2 * (this.smooth*(absZ/16-0.5)));
                 this.server.data[chunkX][chunkZ][x][z] = Math.round(test*10)+50;
             }
         }
