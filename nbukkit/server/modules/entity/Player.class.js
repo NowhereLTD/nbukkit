@@ -1,6 +1,7 @@
 const mc = require('minecraft-protocol');
 const Vec3 = require('vec3');
 const Inventory = require('../inventory/Inventory.class.js');
+const EventHandler = require("events");
 
 module.exports = class Player {
 
@@ -16,6 +17,7 @@ module.exports = class Player {
         this.inventory = new Inventory(36, this);
         this.nearbyPlayer = [];
         this.spawnedPlayer = [];
+        this.events = new EventHandler.EventEmitter();
     }
 
     async calcNearbyPlayers() {

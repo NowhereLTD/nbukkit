@@ -119,6 +119,7 @@ module.exports = class ConnectionPlayer {
 
     handle() {
         this.client.on('packet',  (data, meta) => {
+            new Packet(this.player, data, meta).trigger();
             switch (meta.name) {
                 case 'chat':
                     this.receiveMessage(data.message, this.player);
