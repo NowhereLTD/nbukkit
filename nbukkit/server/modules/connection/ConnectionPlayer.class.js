@@ -1,3 +1,5 @@
+const Packet = require('../connection/Packet.class.js');
+
 module.exports = class ConnectionPlayer {
 
     constructor(client) {

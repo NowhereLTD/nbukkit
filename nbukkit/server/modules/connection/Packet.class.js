@@ -9,6 +9,7 @@ class Packet {
 
     trigger(){
         this.player.events.emit(this.meta.name, this.data, this.meta);
-        console.log("trigger");
     }
 }
+
+module.exports = Packet;
