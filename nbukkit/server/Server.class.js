@@ -19,7 +19,6 @@ module.exports = class Server {
                 generator.generateChunk(i1, i2);
             }
         }
-
     }
 
 
@@ -52,6 +51,8 @@ module.exports = class Server {
 
     startWorldGeneration() {
 
+        //console.log(this.data[0])
+        console.log("World generation started...");
         for(let chunkX = 0; chunkX<this.data.length; chunkX++){
             if(!this.chunkList[chunkX]){
                 this.chunkList[chunkX] = [];
@@ -81,6 +82,8 @@ module.exports = class Server {
 
             }
         }
+
+        console.log("World generation complete!");
 
     }
 /*
