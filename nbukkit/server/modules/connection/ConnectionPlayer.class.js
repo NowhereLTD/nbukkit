@@ -1,4 +1,4 @@
-const Packet = require('../connection/Packet.class.js');
+const Packet = require("../connection/Packet.class.js");
 
 module.exports = class ConnectionPlayer {
 
@@ -8,16 +8,16 @@ module.exports = class ConnectionPlayer {
     }
 
     spawn() {
-        this.sendPacket('login', {
+        this.sendPacket("login", {
             entityId: this.player.entityId,
-            levelType: 'default',
+            levelType: "default",
             gameMode: this.player.server.properties.gamemode,
             dimension: 0,
             difficulty: this.player.server.properties.difficulty,
             maxPlayers: this.player.server.properties.maxPlayers,
             reducedDebugInfo: false
         });
-        this.sendPacket('map_chunk', {
+        this.sendPacket("map_chunk", {
             x: 0,
             z: 0,
             groundUp: true,
@@ -25,7 +25,7 @@ module.exports = class ConnectionPlayer {
             chunkData: this.player.server.chunk.dump(),
             blockEntities: []
         });
-        this.sendPacket('position', {
+        this.sendPacket("position", {
             x: this.player.location.x,
             y: this.player.location.y,
             z: this.player.location.z,
@@ -33,19 +33,19 @@ module.exports = class ConnectionPlayer {
             pitch: this.player.location.pitch,
             flags: 0x00
         });
-        this.sendPacket('entity_metadata', {
+        this.sendPacket("entity_metadata", {
             entityId: this.player.entityId,
             metadata: [
                 { type: 0, value: 127, key: 10 }
             ]
         });
-        this.sendPacket('player_info', {
+        this.sendPacket("player_info", {
             action: 0,
             data: [{
                 UUID: this.player.uuid,
                 name: this.player.name,
                 properties: [{
-                    name: 'texture',
+                    name: "texture",
                     signature: this.client.profile.properties[0].signature,
                     value: this.client.profile.properties[0].value
                 }],
@@ -57,7 +57,7 @@ module.exports = class ConnectionPlayer {
     }
 
     addOtherToTabList(p) {
-        this.sendPacket('player_info', {
+        this.sendPacket("player_info", {
             action: 0,
             data: [{
                 UUID: p.uuid,
@@ -75,7 +75,7 @@ module.exports = class ConnectionPlayer {
     }
 
     spawnOtherPlayer(p) {
-        this.sendPacket('named_entity_spawn', {
+        this.sendPacket("named_entity_spawn", {
             entityId: p.entityId,
             playerUUID: p.uuid,
             x: (p.location.x * 32),
@@ -87,14 +87,14 @@ module.exports = class ConnectionPlayer {
                 { type: 0, value: 127, key: 10 }
             ]
         });
-        this.sendPacket('entity_head_rotation', {
+        this.sendPacket("entity_head_rotation", {
            entityId: p.entityId,
            headYaw: this.convAngle(p.location.yaw)
         });
     }
 
     removeOtherFromTabList(p) {
-        this.sendPacket('player_info', {
+        this.sendPacket("player_info", {
             action: 4,
             data: [{
                 UUID: p.uuid
@@ -103,13 +103,13 @@ module.exports = class ConnectionPlayer {
     }
 
     destroyEntities(entityIds) {
-        this.sendPacket('entity_destroy', {
-            'entityIds': entityIds.map(e => e)
+        this.sendPacket("entity_destroy", {
+            "entityIds": entityIds.map(e => e)
         })
     }
 
     sendMessage(message) {
-        this.sendPacket('chat', {
+        this.sendPacket("chat", {
             message: JSON.stringify(message),
             position: 0
         });
@@ -120,32 +120,32 @@ module.exports = class ConnectionPlayer {
     }
 
     handle() {
-        this.client.on('packet',  (data, meta) => {
+        this.client.on("packet",  (data, meta) => {
             new Packet(this.player, data, meta).trigger();
             switch (meta.name) {
-                case 'chat':
+                case "chat":
                     this.receiveMessage(data.message, this.player);
                     break;
-                case 'position':
+                case "position":
                     this.receiveMovement(data, true, false);
                     break;
-                case 'look':
+                case "look":
                     this.receiveMovement(data, false, true);
                     break;
-                case 'position_look':
+                case "position_look":
                     this.receiveMovement(data, true, true);
                     break;
-                case 'flying':
+                case "flying":
                     this.receiveMovement(data, false, false);
                     break;
-                case 'keep_alive':
+                case "keep_alive":
                     this.player.calcNearbyPlayers();
                     break;
-                case 'entity_action':
+                case "entity_action":
                     this.receiveEntityAction(data);
                     break;
-                case 'arm_animation':
-                    this.player.nearbyPlayer.forEach(p => p.connection.sendPacket('animation', {
+                case "arm_animation":
+                    this.player.nearbyPlayer.forEach(p => p.connection.sendPacket("animation", {
                        entityId: this.player.entityId,
                         animation: 0
                     }));
@@ -154,7 +154,7 @@ module.exports = class ConnectionPlayer {
                     break;
             }
         });
-        this.client.on('end', () => {
+        this.client.on("end", () => {
             this.player.server.entityManager.destroyPlayer(this.player);
         });
     }
@@ -176,7 +176,7 @@ module.exports = class ConnectionPlayer {
                 data.pitch,
                 this.player.location.world,
                 data.onGround);
-            packetName = 'entity_move_look';
+            packetName = "entity_move_look";
             packetData = {
                 entityId: this.player.entityId,
                 dX: deltaX,
@@ -195,7 +195,7 @@ module.exports = class ConnectionPlayer {
                 data.pitch,
                 this.player.location.world,
                 data.onGround);
-            packetName = 'entity_look';
+            packetName = "entity_look";
             packetData = {
                 entityId: this.player.entityId,
                 yaw: this.convAngle(data.yaw),
@@ -213,7 +213,7 @@ module.exports = class ConnectionPlayer {
                 this.player.location.pitch,
                 this.player.location.world,
                 data.onGround);
-            packetName = 'rel_entity_move';
+            packetName = "rel_entity_move";
             packetData = {
                 entityId: this.player.entityId,
                 dX: deltaX,
@@ -234,14 +234,14 @@ module.exports = class ConnectionPlayer {
         }
 
         if(packetName !== undefined) {
-            if(packetName === 'entity_look' || packetName === 'entity_move_look') {
+            if(packetName === "entity_look" || packetName === "entity_move_look") {
                 let rotData = {
                     entityId: this.player.entityId,
                     headYaw: this.convAngle(data.yaw)
                 };
                 this.player.nearbyPlayer.forEach((p) => {
                     p.connection.sendPacket(packetName, packetData);
-                    p.connection.sendPacket('entity_head_rotation', rotData);
+                    p.connection.sendPacket("entity_head_rotation", rotData);
                 });
             } else {
                 this.player.nearbyPlayer.forEach((p) => {
@@ -297,9 +297,9 @@ module.exports = class ConnectionPlayer {
                 { type: 0, value: b, key: 0 }
             ]
         };
-        this.sendPacket('entity_metadata', data);
+        this.sendPacket("entity_metadata", data);
         this.player.nearbyPlayer.forEach(p => {
-           p.connection.sendPacket('entity_metadata', data);
+           p.connection.sendPacket("entity_metadata", data);
         });
     }
 
