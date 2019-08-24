@@ -25,7 +25,7 @@ module.exports = class ChatManager {
 
     sendJoinMessage(joinedPlayer) {
         let msg = this.server.properties.messages.joinMessageTemplate.replace(/%p%/g, joinedPlayer.displayname);
-        sendMessageToAll(msg);
+        this.sendMessageToAll(msg);
     }
 
     sendLeaveMessage(leavedPlayer) {
