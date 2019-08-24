@@ -122,10 +122,13 @@ module.exports = class ConnectionPlayer {
     handle() {
         this.client.on("packet",  (data, meta) => {
             new Packet(this.player, data, meta).trigger();
+            this.player.events.on("before_chat", (packet) => {
+               packet.data.message = "§c" + packet.data.message;
+            });
+            this.player.events.on('chat', (data) => {
+                this.reveiveMessage(data.message, this.player);
+            });
             switch (meta.name) {
-                case "chat":
-                    this.receiveMessage(data.message, this.player);
-                    break;
                 case "position":
                     this.receiveMovement(data, true, false);
                     break;
@@ -167,6 +170,10 @@ module.exports = class ConnectionPlayer {
         let action = data.mouse;
         switch (action) {
             case 0:
+                break;
+            case 1:
+                break;
+            case 2:
                 break;
             default:
                 break;

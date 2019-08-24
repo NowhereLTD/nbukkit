@@ -7,7 +7,12 @@ class Packet {
         this.meta = meta;
     }
 
-    trigger(){
+    async triggerBefore() {
+        await this.player.event.emit("before_" + this.meta.name, this);
+    }
+
+    async trigger(){
+        this.triggerBefore();
         this.player.events.emit(this.meta.name, this.data, this.meta);
     }
 }
