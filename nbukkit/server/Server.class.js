@@ -1,6 +1,7 @@
 const mc = require('minecraft-protocol');
 const Chunk = require('prismarine-chunk')('1.8');
 const Vec3 = require('vec3');
+const WorldGenerator = require("./modules/worlds/WorldGenerator.class");
 const ConnectionManager = require('./modules/connection/ConnectionManager.class.js');
 const WorldManager = require('./modules/worlds/WorldManager.class.js');
 const EntityManager = require('./modules/entity/EntityManager.class');
@@ -10,6 +11,9 @@ module.exports = class Server {
 
     constructor(properties) {
         this.properties = properties;
+        this.data = [];
+        let generator = new WorldGenerator(this);
+        generator.generateChunk(0, 0);
     }
 
 
@@ -41,11 +45,15 @@ module.exports = class Server {
 
 
     startWorldGeneration() {
+
         this.chunk = new Chunk();
 
         for (let x = 0; x < 16; x++) {
             for (let z = 0; z < 16; z++) {
-                this.chunk.setBlockType(new Vec3(x, 100, z), 2)
+                for(let y = 0; y < this.data[x][z]; y++) {
+                    this.chunk.setBlockType(new Vec3(x, y, z), 1);
+                }
+
                 for (let y = 0; y < 256; y++) {
                     this.chunk.setSkyLight(new Vec3(x, y, z), 15)
                 }
