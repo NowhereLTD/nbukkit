@@ -117,17 +117,17 @@ module.exports = class ConnectionPlayer {
 
     setPlayer(player) {
         this.player = player;
+        this.player.events.on("before_chat", (packet) => {
+           packet.data.message = "§c" + packet.data.message;
+        });
+        this.player.events.on('chat', (data) => {
+            this.receiveMessage(data.message, this.player);
+        });
     }
 
     handle() {
         this.client.on("packet",  (data, meta) => {
             new Packet(this.player, data, meta).trigger();
-            this.player.events.on("before_chat", (packet) => {
-               packet.data.message = "§c" + packet.data.message;
-            });
-            this.player.events.on('chat', (data) => {
-                this.reveiveMessage(data.message, this.player);
-            });
             switch (meta.name) {
                 case "position":
                     this.receiveMovement(data, true, false);

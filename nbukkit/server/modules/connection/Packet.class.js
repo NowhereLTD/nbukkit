@@ -8,10 +8,10 @@ class Packet {
     }
 
     async triggerBefore() {
-        await this.player.event.emit("before_" + this.meta.name, this);
+        await new Promise(resolve => {this.player.events.emit("before_" + this.meta.name, this)});
     }
 
-    async trigger(){
+    trigger(){
         this.triggerBefore();
         this.player.events.emit(this.meta.name, this.data, this.meta);
     }
