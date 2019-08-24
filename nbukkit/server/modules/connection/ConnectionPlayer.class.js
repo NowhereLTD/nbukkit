@@ -117,51 +117,48 @@ module.exports = class ConnectionPlayer {
 
     setPlayer(player) {
         this.player = player;
-        this.player.events.on("before_chat", (packet) => {
-           packet.data.message = "§c" + packet.data.message;
-        });
-        this.player.events.on('chat', (data) => {
-            this.receiveMessage(data.message, this.player);
-        });
+        this.addDefaultEvents();
     }
 
     handle() {
         this.client.on("packet",  (data, meta) => {
             new Packet(this.player, data, meta).trigger();
-            switch (meta.name) {
-                case "position":
-                    this.receiveMovement(data, true, false);
-                    break;
-                case "look":
-                    this.receiveMovement(data, false, true);
-                    break;
-                case "position_look":
-                    this.receiveMovement(data, true, true);
-                    break;
-                case "flying":
-                    this.receiveMovement(data, false, false);
-                    break;
-                case "keep_alive":
-                    this.player.calcNearbyPlayers();
-                    break;
-                case "entity_action":
-                    this.receiveEntityAction(data);
-                    break;
-                case "arm_animation":
-                    this.player.nearbyPlayer.forEach(p => p.connection.sendPacket("animation", {
-                       entityId: this.player.entityId,
-                        animation: 0
-                    }));
-                    break;
-                case 'use_entity':
-                    this.player.interact(data);
-                    break;
-                default:
-                    break;
-            }
         });
         this.client.on("end", () => {
             this.player.server.entityManager.destroyPlayer(this.player);
+        });
+    }
+
+    addDefaultEvents() {
+        this.player.events.on('chat', (data) => {
+            this.receiveMessage(data.message, this.player);
+        });
+        this.player.events.on('position', (data) => {
+           this.receiveMovement(data, true, false);
+        });
+        this.player.events.on('look', (data) => {
+           this.receiveMovement(data, false, true);
+        });
+        this.player.events.on('position_look', (data) => {
+           this.receiveMovement(data, true, true);
+        });
+        this.player.events.on('flying', (data) => {
+           this.receiveMovement(data, false, false);
+        });
+        this.player.events.on('keep_alive', () => {
+           this.player.calcNearbyPlayers();
+        });
+        this.player.events.on('entity_action', (data) => {
+           this.receiveEntityAction(data);
+        });
+        this.player.events.on('arm_animation', () => {
+            this.player.nearbyPlayer.forEach(p => p.connection.sendPacket("animation", {
+                entityId: this.player.entityId,
+                animation: 0
+            }));
+        });
+        this.player.events.on('use_entity', (data) => {
+           this.interact(data);
         });
     }
 
