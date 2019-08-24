@@ -51,4 +51,10 @@ module.exports = class EntityManager {
         });
     }
 
+    getPlayerByUUID(uuid) {}
+
+    getPlayerByEntityId(entityId) {
+        return Object.entries(this.players).filter((pp) => pp.entityId === entityId)[0];
+    }
+
 };

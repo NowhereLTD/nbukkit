@@ -147,6 +147,9 @@ module.exports = class ConnectionPlayer {
                         animation: 0
                     }));
                     break;
+                case 'use_entity':
+                    this.player.interact(data);
+                    break;
                 default:
                     break;
             }
@@ -154,6 +157,17 @@ module.exports = class ConnectionPlayer {
         this.client.on('end', () => {
             this.player.server.entityManager.destroyPlayer(this.player);
         });
+    }
+
+    interact(data) {
+        let playerTarget = this.player.server.EntityManager.getPlayerByEntityId(data.target);
+        let action = data.mouse;
+        switch (action) {
+            case 0:
+                break;
+            default:
+                break;
+        }
     }
 
     receiveMovement(data, hasPos, hasLook) {

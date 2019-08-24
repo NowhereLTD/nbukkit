@@ -5,4 +5,6 @@ module.exports = class Item {
         this.damage = damage;
     }
 
-}
+
+
+};

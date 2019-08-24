@@ -14,6 +14,12 @@ module.exports = class Inventory {
         this.items[id] = item;
     }
 
+    removeItem(id) {
+        this.items[id] = null;
+    }
 
+    clear() {
+        this.items = [];
+    }
 
 }

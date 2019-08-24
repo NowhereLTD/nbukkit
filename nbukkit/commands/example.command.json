@@ -1,0 +1,21 @@
+{
+  "command": "example",
+  "preferences": {
+    "": {
+      "0": {
+        "eventClass": "commandExample.cmd.js",
+        "eventFunction": "example0s"
+      },
+      "1": {
+        "help": {
+          "eventClass": "commandExample.cmd.js",
+          "eventFunction": "exampleHelp"
+        },
+        "": {
+          "eventClass": "error.cmd.js",
+          "eventFunction": "error"
+        }
+      }
+    }
+  }
+}
