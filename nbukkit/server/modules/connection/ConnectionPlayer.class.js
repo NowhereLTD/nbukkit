@@ -17,8 +17,8 @@ module.exports = class ConnectionPlayer {
             maxPlayers: this.player.server.properties.maxPlayers,
             reducedDebugInfo: false
         });
-        for(let chunkX = 0; chunkX<this.player.server.chunkList.length; chunkX++){
-            for(let chunkZ = 0; chunkZ<this.player.server.chunkList[chunkX].length; chunkZ++){
+        for(let chunkX in this.player.server.chunkList){
+            for(let chunkZ in this.player.server.chunkList[chunkX]){
                 this.sendPacket("map_chunk", {
                     x: chunkX,
                     z: chunkZ,
