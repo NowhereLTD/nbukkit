@@ -87,7 +87,7 @@ module.exports = class Server {
 
                             for(let i=-2; i<2; i++){
                                 for(let i1=-2; i1<2; i1++){
-                                    for(let i2=0; i2<=3; i2++){
+                                    for(let i2=0; i2<3; i2++){
                                         chunk.setBlockType(new Vec3(x+i, y+4+i2, z+i1), 18);
                                     }
                                 }

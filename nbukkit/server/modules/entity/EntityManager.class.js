@@ -14,7 +14,7 @@ module.exports = class EntityManager {
     }
 
     createPlayer(connectionPlayer) {
-        let player = new Player(this.server, new Location(150, 70, 150, -80, 0, 'world', true), connectionPlayer);
+        let player = new Player(this.server, new Location(150, 70, 150 -80, 0, 'world', true), connectionPlayer);
         player.connection.setPlayer(player);
         this.players.push(player);
         this.server.chatManager.sendJoinMessage(player);
