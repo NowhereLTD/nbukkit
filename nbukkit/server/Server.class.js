@@ -13,6 +13,7 @@ module.exports = class Server {
         this.properties = properties;
         this.data = [];
         this.chunkList = [];
+        this.worldObjecs = [];
         let generator = new WorldGenerator(this);
         for(let i1=0; i1<16; i1++){
             for(let i2=0; i2<16; i2++){
@@ -69,6 +70,27 @@ module.exports = class Server {
                                 chunk.setBlockType(new Vec3(x, y, z), 3);
                             }else{
                                 chunk.setBlockType(new Vec3(x, y, z), 1);
+                            }
+                        }
+
+                        for(let objCount=0; objCount<this.worldObjecs[chunkX][chunkZ].length; objCount++){
+                            let obj = this.worldObjecs[chunkX][chunkZ][objCount];
+                            let x = obj.x;
+                            let z = obj.z;
+                            let y = this.data[chunkX][chunkZ][x][z];
+
+                            chunk.setBlockType(new Vec3(x, y+1, z), 17);
+                            chunk.setBlockType(new Vec3(x, y+2, z), 17);
+                            chunk.setBlockType(new Vec3(x, y+3, z), 17);
+                            chunk.setBlockType(new Vec3(x, y+4, z), 17);
+                            chunk.setBlockType(new Vec3(x, y+5, z), 17);
+
+                            for(let i=-2; i<2; i++){
+                                for(let i1=-2; i1<2; i1++){
+                                    for(let i2=0; i2<=3; i2++){
+                                        chunk.setBlockType(new Vec3(x+i, y+4+i2, z+i1), 18);
+                                    }
+                                }
                             }
                         }
 

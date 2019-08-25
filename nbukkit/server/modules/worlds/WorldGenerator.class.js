@@ -3,10 +3,13 @@ const SimplexNoise = require("simplex-noise");
 class WorldGenerator{
     constructor(server, seed = Math.floor(Math.random()*100000)){
         this.server = server;
-        this.seed = Math.floor(Math.sin(this.seed));
-        this.simplex = new SimplexNoise(this.seed);
+        this.seed = seed;
+        this.seedMultipler = 1000000000;
+        this.buildingSeed = this.seed;
+        this.simplex = new SimplexNoise(Math.floor(Math.sin(this.seed)*this.seedMultipler));
         this.smooth = 0.3;
         this.flatness = 1.5;
+        this.treeDensity = 5;
     }
 
     generateChunk(chunkX, chunkZ){
@@ -33,6 +36,34 @@ class WorldGenerator{
                 }
                 this.server.data[chunkX][chunkZ][x][z] = Math.round(test*10)+50;
             }
+        }
+        this.generateTrees(chunkX, chunkZ);
+    }
+
+    generateTrees(chunkX, chunkZ){
+
+        if(!this.server.worldObjecs[chunkX]){
+            this.server.worldObjecs[chunkX] = [];
+        }
+        if(!this.server.worldObjecs[chunkX][chunkZ]){
+            this.server.worldObjecs[chunkX][chunkZ] = [];
+        }
+
+        for(let treeCount=0; treeCount<=this.treeDensity; treeCount++){
+            let treePosX = Math.floor(Math.sin(this.buildingSeed)*8);
+            this.buildingSeed++;
+            let treePosZ = Math.floor(Math.sin(this.buildingSeed)*8);
+            if(treePosX<0){
+                treePosX = Math.abs(treePosX);
+            }
+            if(treePosZ<0){
+                treePosZ = Math.abs(treePosZ);
+            }
+            treePosX = treePosX + 5;
+            treePosZ = treePosZ + 5;
+            console.log(treePosX);
+            this.server.worldObjecs[chunkX][chunkZ].push({"x": treePosX, "z": treePosZ, "type": "tree"});
+            this.buildingSeed++;
         }
     }
 }
