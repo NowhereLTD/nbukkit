@@ -15,8 +15,8 @@ module.exports = class Server {
         this.chunkList = [];
         this.worldObjecs = [];
         let generator = new WorldGenerator(this);
-        for(let i1=0; i1<16; i1++){
-            for(let i2=0; i2<16; i2++){
+        for(let i1=-16; i1<0; i1++){
+            for(let i2=-16; i2<0; i2++){
                 generator.generateChunk(i1, i2);
             }
         }
@@ -54,15 +54,14 @@ module.exports = class Server {
 
         //console.log(this.data[0])
         console.log("World generation started...");
-        for(let chunkX = 0; chunkX<this.data.length; chunkX++){
+        for(let chunkX in this.data){
             if(!this.chunkList[chunkX]){
                 this.chunkList[chunkX] = [];
             }
-            for(let chunkZ = 0; chunkZ<this.data[chunkX].length; chunkZ++){
+            for(let chunkZ in this.data[chunkX]){
                 let chunk = new Chunk();
-
                 for (let x = 0; x < 16; x++) {
-                    for (let z = 0; z < 16; z++) {
+                    for (let z = 0; z < 16; z++){
                         for(let y = 0; y <= this.data[chunkX][chunkZ][x][z]; y++) {
                             if(y == this.data[chunkX][chunkZ][x][z]){
                                 chunk.setBlockType(new Vec3(x, y, z), 2);
@@ -101,6 +100,7 @@ module.exports = class Server {
                 }
 
                 this.chunkList[chunkX][chunkZ] = chunk;
+
 
             }
         }

@@ -71,7 +71,7 @@ class WorldGenerator{
                 }
             }
             if(checkDis){
-                this.world.worldObjecs[chunkX][chunkZ].push({"x": treePosX, "z": treePosZ, "type": "tree"});
+                this.world.worldObjecs[chunkX][chunkZ].push({"x": treePosX, "z": treePosZ, "type": "tree", "chunkX": chunkX, "chunkZ": chunkZ});
             }
 
             this.buildingSeed++;
