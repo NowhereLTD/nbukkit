@@ -18,6 +18,8 @@ module.exports = class Player {
         this.nearbyPlayer = [];
         this.spawnedPlayer = [];
         this.events = new EventHandler.EventEmitter();
+
+        this.loadedChunks = [];
     }
 
     async calcNearbyPlayers() {
@@ -71,6 +73,11 @@ module.exports = class Player {
     }
 
     updateLocation(x, y, z, yaw, pitch, world, onGround) {
+        this.location.calcChunkLocation();
+
+        let oldChunkX = this.location.chunkX;
+        let oldChunkZ = this.location.chunkZ;
+
         this.location.x = x;
         this.location.y = y;
         this.location.z = z;
@@ -78,6 +85,58 @@ module.exports = class Player {
         this.location.pitch = pitch;
         this.location.world = world;
         this.location.onGround = onGround;
+
+        this.location.calcChunkLocation();
+
+        if(this.location.chunkX - oldChunkX !== 0 || this.location.chunkZ - oldChunkZ !== 0) {
+            //new chunk loading
+            let newChunkArray = [];
+            for(let x = (this.location.chunkX - 8); x <= (this.location.chunkX + 8); x++) {
+                for(let z = (this.location.chunkZ - 8); z <= (this.location.chunkZ + 8); z++) {
+                    newChunkArray.push({"x": x, "z": z});
+                }
+            }
+
+            let combine = [];
+
+            console.log(newChunkArray === this.loadedChunks);
+
+            outer:
+            for(let newData in newChunkArray) {
+                for(let oldData in this.loadedChunks) {
+                    if(newData.x === oldData.x && newData.z === oldData.z)  {
+                        combine.push(newData);
+                        continue outer;
+                    }
+                    console.log("fogijdf");
+                }
+                this.loadChunk(newData.x, newData.z);
+            }
+
+            outer:
+            for (let oldData in this.loadedChunks) {
+                for (let loaded in combine)  {
+                    if(loaded.x === oldData.x && loaded.z === oldData.z) {
+                        continue outer;
+                    }
+                }
+                this.unloadChunk(oldDate.x, oldDate.z);
+            }
+
+            this.loadedChunks = newChunkArray;
+        }
+    }
+
+    loadChunk(chunkX, chunkZ) {
+        if(!this.server.worldManager.getWorld(this.location.world).chunkList[chunkX] || !this.server.worldManager.getWorld(this.location.world).chunkList[chunkX][chunkZ]) {
+            this.server.worldManager.getWorld(this.location.world).createChunk(chunkX, chunkZ);
+        }
+
+        this.connection.sendChunk(chunkX, chunkZ, this.server.worldManager.getWorld(this.location.world).chunkList[chunkX][chunkZ].dump());
+    }
+
+    unloadChunk(chunkX, chunkZ) {
+        this.connection.sendChunk(chunkX, chunkZ, this.server.worldManager.getWorld(this.location.world).chunkList[chunkX][chunkZ].dump(), 0);
     }
 
 };

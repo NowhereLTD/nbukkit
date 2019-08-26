@@ -39,6 +39,9 @@ class WorldGenerator{
             }
         }
         this.generateTrees(chunkX, chunkZ);
+
+
+        this.world.buildChunk(chunkX, chunkZ);
     }
 
     generateTrees(chunkX, chunkZ){
