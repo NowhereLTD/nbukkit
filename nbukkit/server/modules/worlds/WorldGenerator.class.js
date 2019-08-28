@@ -1,7 +1,8 @@
 const SimplexNoise = require("simplex-noise");
+const Biome = require("../worlds/Biome.class.js");
 
 class WorldGenerator{
-    constructor(world, seed = Math.floor(Math.random()*100000), seedMultipler = 1000000000, smooth = 0.3, flatness = 1.5, treeDensity = 3, treeDistance = 3){
+    constructor(world, seed = Math.floor(Math.random()*100000), seedMultipler = 1000000000, smooth = 0.3, flatness = 1, treeDensity = 3, treeDistance = 3){
         this.world = world;
         this.seed = seed;
         this.seedMultipler = seedMultipler;
@@ -13,7 +14,7 @@ class WorldGenerator{
         this.treeDistance = treeDistance;
     }
 
-    generateChunk(chunkX, chunkZ){
+    generateChunk(chunkX, chunkZ, biome = new Biome()){
         if(!this.world.data[chunkX]){
             this.world.data[chunkX] = [];
         }

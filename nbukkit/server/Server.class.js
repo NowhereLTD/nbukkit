@@ -6,6 +6,7 @@ const ConnectionManager = require('./modules/connection/ConnectionManager.class.
 const WorldManager = require('./modules/worlds/WorldManager.class.js');
 const EntityManager = require('./modules/entity/EntityManager.class');
 const ChatManager = require('./modules/chat/ChatManager.class');
+const Biome = require("./modules/worlds/Biome.class.js");
 
 module.exports = class Server {
 
@@ -52,6 +53,8 @@ module.exports = class Server {
 
     startWorldGeneration() {
 
+        let biome = new Biome();
+
         //console.log(this.data[0])
         console.log("World generation started...");
         for(let chunkX in this.data){
@@ -63,13 +66,21 @@ module.exports = class Server {
                 for (let x = 0; x < 16; x++) {
                     for (let z = 0; z < 16; z++){
                         for(let y = 0; y <= this.data[chunkX][chunkZ][x][z]; y++) {
-                            if(y == this.data[chunkX][chunkZ][x][z]){
+                            for(let layerID in biome.worldLayer){
+                                let layer = biome.worldLayer[layerID];
+                                if(y <= this.data[chunkX][chunkZ][x][z] - layer.start){
+                                    if(y >= this.data[chunkX][chunkZ][x][z] - layer.start - layer.size){
+                                        chunk.setBlockType(new Vec3(x, y, z), layer.block);
+                                    }
+                                }
+                            }
+                            /*if(y == this.data[chunkX][chunkZ][x][z]){
                                 chunk.setBlockType(new Vec3(x, y, z), 2);
                             }else if(y > this.data[chunkX][chunkZ][x][z] - 4){
                                 chunk.setBlockType(new Vec3(x, y, z), 3);
                             }else{
                                 chunk.setBlockType(new Vec3(x, y, z), 1);
-                            }
+                            }*/
                         }
 
                         for(let objCount=0; objCount<this.worldObjecs[chunkX][chunkZ].length; objCount++){
