@@ -1,7 +1,4 @@
 const mc = require('minecraft-protocol');
-const Chunk = require('prismarine-chunk')('1.8');
-const Vec3 = require('vec3');
-const WorldGenerator = require("./modules/worlds/WorldGenerator.class");
 const ConnectionManager = require('./modules/connection/ConnectionManager.class.js');
 const WorldManager = require('./modules/worlds/WorldManager.class.js');
 const EntityManager = require('./modules/entity/EntityManager.class');
@@ -12,17 +9,7 @@ module.exports = class Server {
 
     constructor(properties) {
         this.properties = properties;
-        this.data = [];
-        this.chunkList = [];
-        this.worldObjecs = [];
-        let generator = new WorldGenerator(this);
-        for(let i1=-16; i1<0; i1++){
-            for(let i2=-16; i2<0; i2++){
-                generator.generateChunk(i1, i2);
-            }
-        }
     }
-
 
     startServer() {
         console.log("Init Server with Port: " + this.properties.serverPort);
@@ -41,8 +28,7 @@ module.exports = class Server {
         this.entityManager = new EntityManager(this);
         this.chatManager = new ChatManager(this);
 
-        this.startWorldGeneration();
-        //this.defaultListener();
+        this.worldManager.defaultWorld();
     }
 
 
@@ -50,6 +36,7 @@ module.exports = class Server {
         this.mc.close();
     }
 
+<<<<<<< HEAD
 
     startWorldGeneration() {
 
@@ -126,4 +113,6 @@ module.exports = class Server {
         }.bind(this))
     }*/
 
+=======
+>>>>>>> bac3c347f65911b93f24ae4c5c6e1b1cc4dc2bd0
 };

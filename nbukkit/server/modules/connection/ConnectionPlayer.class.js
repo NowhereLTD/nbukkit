@@ -17,16 +17,12 @@ module.exports = class ConnectionPlayer {
             maxPlayers: this.player.server.properties.maxPlayers,
             reducedDebugInfo: false
         });
-        for(let chunkX in this.player.server.chunkList){
-            for(let chunkZ in this.player.server.chunkList[chunkX]){
-                this.sendPacket("map_chunk", {
-                    x: chunkX,
-                    z: chunkZ,
-                    groundUp: true,
-                    bitMap: 0xffff,
-                    chunkData: this.player.server.chunkList[chunkX][chunkZ].dump(),
-                    blockEntities: []
-                });
+
+        this.player.location.calcChunkLocation();
+        for(let x = (this.player.location.chunkX - 8); x <= (this.player.location.chunkX + 8); x++) {
+            for(let z = (this.player.location.chunkZ - 8); z <= (this.player.location.chunkZ + 8); z++) {
+                this.player.loadChunk(x, z);
+                this.player.loadedChunks.push({"x": x, "z": z});
             }
         }
 
@@ -58,6 +54,17 @@ module.exports = class ConnectionPlayer {
                 ping: this.client.latency,
                 displayName: this.player.displayname
             }]
+        });
+    }
+
+    sendChunk(chunkX, chunkZ, data, bitmap = 0xffff) {
+        this.sendPacket("map_chunk", {
+            x: chunkX,
+            z: chunkZ,
+            groundUp: true,
+            bitMap: bitmap,
+            chunkData: data,
+            blockEntities: []
         });
     }
 

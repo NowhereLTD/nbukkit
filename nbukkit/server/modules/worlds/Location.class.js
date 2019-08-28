@@ -10,4 +10,9 @@ module.exports = class Location {
         this.onGround = onGround;
     }
 
+    calcChunkLocation() {
+        this.chunkX = Math.floor(this.x / 16);
+        this.chunkZ = Math.floor(this.z / 16)
+    }
+
 };
