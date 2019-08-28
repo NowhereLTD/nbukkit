@@ -36,8 +36,6 @@ module.exports = class Server {
         this.mc.close();
     }
 
-<<<<<<< HEAD
-
     startWorldGeneration() {
 
         let biome = new Biome();
@@ -113,6 +111,4 @@ module.exports = class Server {
         }.bind(this))
     }*/
 
-=======
->>>>>>> bac3c347f65911b93f24ae4c5c6e1b1cc4dc2bd0
 };
