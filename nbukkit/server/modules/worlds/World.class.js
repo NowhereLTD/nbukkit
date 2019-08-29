@@ -1,6 +1,7 @@
 const WorldGenerator = require("./WorldGenerator.class.js");
 const Chunk = require('prismarine-chunk')('1.8');
-const Vec3 = require('vec3');
+const Vec3 = require("vec3");
+const Biome = require("../worlds/Biome.class.js");
 
 module.exports = class World {
 
@@ -35,7 +36,7 @@ module.exports = class World {
         this.worldGenerator.generateChunk(chunkX, chunkZ);
     }
 
-    buildChunk(chunkX, chunkZ) {
+    buildChunk(chunkX, chunkZ, biome = new Biome()) {
 
         if(!this.chunkList[chunkX])
             this.chunkList[chunkX] = [];
@@ -44,12 +45,13 @@ module.exports = class World {
         for (let x = 0; x < 16; x++) {
             for (let z = 0; z < 16; z++){
                 for(let y = 0; y <= this.data[chunkX][chunkZ][x][z]; y++) {
-                    if(y == this.data[chunkX][chunkZ][x][z]){
-                        chunk.setBlockType(new Vec3(x, y, z), 2);
-                    }else if(y > this.data[chunkX][chunkZ][x][z] - 4){
-                        chunk.setBlockType(new Vec3(x, y, z), 3);
-                    }else{
-                        chunk.setBlockType(new Vec3(x, y, z), 1);
+                    for(let layerID in biome.worldLayer){
+                        let layer = biome.worldLayer[layerID];
+                        if(y <= this.data[chunkX][chunkZ][x][z] - layer.start){
+                            if(y >= this.data[chunkX][chunkZ][x][z] - layer.start - layer.size){
+                                chunk.setBlockType(new Vec3(x, y, z), layer.block);
+                            }
+                        }
                     }
                 }
 

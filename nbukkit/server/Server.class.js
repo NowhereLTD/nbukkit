@@ -39,6 +39,7 @@ module.exports = class Server {
     startWorldGeneration() {
 
         let biome = new Biome();
+        console.log(biome);
 
         //console.log(this.data[0])
         console.log("World generation started...");

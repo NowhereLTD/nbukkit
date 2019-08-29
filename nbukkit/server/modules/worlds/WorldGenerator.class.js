@@ -14,7 +14,7 @@ class WorldGenerator{
         this.treeDistance = treeDistance;
     }
 
-    generateChunk(chunkX, chunkZ, biome = new Biome()){
+    generateChunk(chunkX, chunkZ){
         if(!this.world.data[chunkX]){
             this.world.data[chunkX] = [];
         }
@@ -27,22 +27,22 @@ class WorldGenerator{
             this.world.data[chunkX][chunkZ][x] = [];
             for(let z=0; z<16; z++){
                 let absZ = chunkZ * 16 + z;
-                let test = this.simplex.noise2D(this.smooth * (absX/16-0.5), this.smooth * (absZ/16-0.5));
+                let simplexData = this.simplex.noise2D(this.smooth * (absX/16-0.5), this.smooth * (absZ/16-0.5));
                 + 0.5 * this.simplex.noise2D((this.smooth*2) * (absX/16-0.5), (this.smooth*2) * (absZ/16-0.5));
                 + 0.25 * this.simplex.noise2D((this.smooth*4) * (absX/16-0.5), (this.smooth*4) * (absZ/16-0.5));
 
-                if(test<0){
-                    test = -1 * Math.pow(-test, this.flatness);
+                if(simplexData<0){
+                    simplexData = -1 * Math.pow(-simplexData, this.flatness);
                 }else{
-                    test = Math.pow(test, this.flatness);
+                    simplexData = Math.pow(simplexData, this.flatness);
                 }
-                this.world.data[chunkX][chunkZ][x][z] = Math.round(test*10)+50;
+                this.world.data[chunkX][chunkZ][x][z] = Math.round(simplexData*10)+50;
             }
         }
         this.generateTrees(chunkX, chunkZ);
 
 
-        this.world.buildChunk(chunkX, chunkZ);
+        this.world.buildChunk(chunkX, chunkZ, new Biome(0, 0, 0, 0, "LITLE_OAK", {"sand": {"start": 0, "size": 4, "block": 12}, "stone": {"start": 4, "size": 50, "block": 1}}));
     }
 
     generateTrees(chunkX, chunkZ){
