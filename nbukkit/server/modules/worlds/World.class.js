@@ -11,7 +11,9 @@ module.exports = class World {
         "smooth": 0.3,
         "flatness": 1.5,
         "treeDestiny": 5,
-        "treeDistance": 5
+        "treeDistance": 5,
+        "baseHeight": 50,
+        "waterHeight": 53
     }) {
         this.worldProperties = worldProperties;
         this.worldGenerator = new WorldGenerator(this, this.worldProperties.seed, this.worldProperties.seedMultiplier, this.worldProperties.smooth, this.worldProperties.flatness, this.worldProperties.treeDestiny, this.worldProperties.treeDistance);
@@ -36,6 +38,25 @@ module.exports = class World {
         this.worldGenerator.generateChunk(chunkX, chunkZ);
     }
 
+    setBlock(vec, block){
+        let endVec = this.getAbsoluteToRelativePosition(vec);
+        let chunk = this.chunkList[endVec.chunkVec.x][endVec.chunkVec.z];
+        chunk.setBlockType(new Vec3(endVec.relativeChunkVec.x, endVec.relativeChunkVec.y, endVec.relativeChunkVec.z), block.type);
+    }
+
+    getAbsoluteToRelativePosition(vec){
+        let x = vec.x;
+        let y = vec.y;
+        let z = vec.z;
+        let chunkX = Math.floor(x/16);
+        let chunkZ = Math.floor(z/16);
+        x = x%16;
+        z = z%16;
+        let relativeChunkVec = new Vec3(x, y, z);
+        let chunkVec = new Vec3(chunkX, y, chunkZ);
+        return {"chunkVec": chunkVec, "relativeChunkVec": relativeChunkVec};
+    }
+
     buildChunk(chunkX, chunkZ, biome = new Biome()) {
 
         if(!this.chunkList[chunkX])
@@ -55,6 +76,13 @@ module.exports = class World {
                     }
                 }
 
+                for(let y = 0; y <= this.worldProperties.waterHeight; y++) {
+                    if(chunk.getBlockType(new Vec3(x, y, z)) == 0){
+                        chunk.setBlockType(new Vec3(x, y, z), 9);
+                    }
+                }
+
+                /*
                 for(let objCount=0; objCount<this.worldObjecs[chunkX][chunkZ].length; objCount++){
                     let obj = this.worldObjecs[chunkX][chunkZ][objCount];
                     let x = obj.x;
@@ -74,7 +102,7 @@ module.exports = class World {
                             }
                         }
                     }
-                }
+                }*/
 
                 for (let y = 0; y < 256; y++) {
                     chunk.setSkyLight(new Vec3(x, y, z), 15)
@@ -83,7 +111,6 @@ module.exports = class World {
         }
 
         this.chunkList[chunkX][chunkZ] = chunk;
-
     }
 
 };
