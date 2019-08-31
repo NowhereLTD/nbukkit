@@ -2,6 +2,7 @@ const WorldGenerator = require("./WorldGenerator.class.js");
 const Chunk = require('prismarine-chunk')('1.8');
 const Vec3 = require("vec3");
 const Biome = require("../worlds/Biome.class.js");
+const Exception = require("../utils/Exception.class.js");
 
 module.exports = class World {
 
@@ -40,8 +41,12 @@ module.exports = class World {
 
     setBlock(vec, block){
         let endVec = this.getAbsoluteToRelativePosition(vec);
-        let chunk = this.chunkList[endVec.chunkVec.x][endVec.chunkVec.z];
-        chunk.setBlockType(new Vec3(endVec.relativeChunkVec.x, endVec.relativeChunkVec.y, endVec.relativeChunkVec.z), block.type);
+        if(this.chunkList[endVec.chunkVec.x] && this.chunkList[endVec.chunkVec.x][endVec.chunkVec.z]){
+            let chunk = this.chunkList[endVec.chunkVec.x][endVec.chunkVec.z];
+            chunk.setBlockType(new Vec3(endVec.relativeChunkVec.x, endVec.relativeChunkVec.y, endVec.relativeChunkVec.z), block.type);
+        }else{
+            throw new Exception("ChunkNotFoundException", "Chunk not found");
+        }
     }
 
     getAbsoluteToRelativePosition(vec){

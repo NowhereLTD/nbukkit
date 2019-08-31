@@ -18,7 +18,7 @@ module.exports = class WorldManager {
         world.createSpawnChunks();
         let block = new Block();
         block.type = 11;
-        world.setBlock(new Vec3(0, 55, 0), block);
+        world.setBlock(new Vec3(1000, 55, 1000), block);
         this.worlds[worldName] = world;
         console.log("Default world creation finished!");
     }
