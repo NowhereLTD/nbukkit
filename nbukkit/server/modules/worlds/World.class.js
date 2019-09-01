@@ -3,7 +3,7 @@ const Chunk = require('prismarine-chunk')('1.8');
 const Vec3 = require("vec3");
 const Biome = require("../worlds/Biome.class.js");
 const Exception = require("../utils/Exception.class.js");
-const Block = require("../block/Block.class.js");
+const Block = require("../material/block/Block.class.js");
 
 module.exports = class World {
 

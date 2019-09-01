@@ -1,4 +1,4 @@
-const Material = require("../block/Material.enum.js");
+const Material = require("../material/Material.enum.js");
 
 
 class Biome {
