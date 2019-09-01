@@ -7,7 +7,7 @@ const Block = require("../block/Block.class.js");
 
 module.exports = class World {
 
-    constructor(worldProperties = {
+    constructor(name = "", db, worldProperties = {
         "seed": 4897389578975,
         "seedMultiplier": 1000000000,
         "smooth": 0.3,
@@ -26,6 +26,8 @@ module.exports = class World {
         this.data = [];
         this.chunkList = [];
         this.worldObjecs = [];
+        this.name = name;
+        this.db = db;
     }
 
     createSpawnChunks() {
@@ -73,7 +75,55 @@ module.exports = class World {
         return {"chunkVec": chunkVec, "relativeChunkVec": relativeChunkVec};
     }
 
-    buildChunk(chunkX, chunkZ, biome = new Biome()) {
+    saveChunkInDatabase(chunk, chunkX, chunkZ){
+        this.db.exec("INSERT INTO world_" + this.name +  "_chunks (name, chunkX, chunkZ, chunkDump) VALUES ('" + this.name + "', " + chunkX + ", " + chunkZ + ", '" + JSON.stringify(chunk.dump().toJSON()) + "');");
+        return true;
+    }
+
+    loadChunkFromDatabase(chunkX, chunkZ){
+        return new Promise(resolve => {
+
+            this.db.get("SELECT chunkDump FROM world_" + this.name +  "_chunks WHERE chunkX=" +chunkX+ " AND chunkZ=" + chunkZ + ";", (error, data) => {
+                if(error){
+                    resolve(false);
+                    return;
+                }
+                if(!data){
+                    resolve(false);
+                    return;
+                }
+
+                if(!this.chunkList[chunkX]){
+                    this.chunkList[chunkX] = [];
+                }
+
+                this.chunkList[chunkX][chunkZ] =  new Chunk();
+
+                let buffer = Buffer.from(JSON.parse(data.chunkDump));
+                this.chunkList[chunkX][chunkZ].load(buffer);
+
+                for (let x = 0; x < 16; x++) {
+                    for (let z = 0; z < 16; z++){
+                        for (let y = 0; y < 256; y++) {
+                            this.chunkList[chunkX][chunkZ].setSkyLight(new Vec3(x, y, z), 15)
+                        }
+                    }
+                }
+                resolve(true);
+            });
+
+        });
+    }
+
+
+    async buildChunk(chunkX, chunkZ, biome = new Biome()) {
+
+        if(await this.loadChunkFromDatabase(chunkX, chunkZ)){
+            //console.log("Load chunk "+chunkX + " - " + chunkZ);
+            return true;
+        }
+
+        //console.log("Generate chunk "+chunkX + " - " + chunkZ);
 
         if(!this.chunkList[chunkX])
             this.chunkList[chunkX] = [];
@@ -92,11 +142,11 @@ module.exports = class World {
                     }
                 }
 
-                /*for(let y = 0; y <= this.worldProperties.waterHeight; y++) {
+                for(let y = 0; y <= this.worldProperties.waterHeight; y++) {
                     if(chunk.getBlockType(new Vec3(x, y, z)) == 0){
                         chunk.setBlockType(new Vec3(x, y, z), 9);
                     }
-                }*/
+                }
 
 
                 for (let y = 0; y < 256; y++) {
@@ -108,10 +158,11 @@ module.exports = class World {
 
         // Add Chunk to Chunk List
         this.chunkList[chunkX][chunkZ] = chunk;
+        this.saveChunkInDatabase(chunk, chunkX, chunkZ);
 
 
         // Generate all Chunk Overloading Stuff
-        for(let objCount=0; objCount<this.worldObjecs[chunkX][chunkZ].length; objCount++){
+        /*for(let objCount=0; objCount<this.worldObjecs[chunkX][chunkZ].length; objCount++){
             let obj = this.worldObjecs[chunkX][chunkZ][objCount];
             let x = (chunkX * 16) + obj.x;
             let z = (chunkZ * 16) + obj.z;
@@ -134,7 +185,7 @@ module.exports = class World {
                     }
                 }
             }
-        }
+        }*/
 
 
     }

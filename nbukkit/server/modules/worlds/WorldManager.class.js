@@ -19,11 +19,13 @@ module.exports = class WorldManager {
 
         // Create Table in Database
         //console.log("CREATE TABLE " + worldName + " IF NOT EXISTS;");
-        console.log(this.db.prepare("CREATE TABLE IF NOT EXISTS world_" + worldName + " (TEXT data);"));
+        this.db.exec("CREATE TABLE IF NOT EXISTS world_" + worldName +  "_chunks (name VARCHAR(32), chunkX INT, chunkZ INT, chunkDump TEXT);");
 
-        let world = new World();
+        let world = new World(worldName, this.db);
+
         world.createSpawnChunks();
-        this.worlds[worldName] = world;
+        this.worlds[world.name] = world;
+
         console.log("The creation of world '" + worldName + "' finished!");
     }
 

@@ -63,3 +63,4 @@ typings/
 
 # Databases
 WorldManager.db
+WorldManager.db-journal
