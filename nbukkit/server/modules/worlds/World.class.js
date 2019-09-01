@@ -3,6 +3,7 @@ const Chunk = require('prismarine-chunk')('1.8');
 const Vec3 = require("vec3");
 const Biome = require("../worlds/Biome.class.js");
 const Exception = require("../utils/Exception.class.js");
+const Block = require("../block/Block.class.js");
 
 module.exports = class World {
 
@@ -45,7 +46,17 @@ module.exports = class World {
             let chunk = this.chunkList[endVec.chunkVec.x][endVec.chunkVec.z];
             chunk.setBlockType(new Vec3(endVec.relativeChunkVec.x, endVec.relativeChunkVec.y, endVec.relativeChunkVec.z), block.type);
         }else{
-            throw new Exception("ChunkNotFoundException", "Chunk not found");
+            //throw new Exception("ChunkNotFoundException", "Cannot found Chunk X: " + endVec.chunkVec.x + ", Z: " + endVec.chunkVec.z);
+        }
+    }
+
+    getBlock(vec){
+        let endVec = this.getAbsoluteToRelativePosition(vec);
+        if(this.chunkList[endVec.chunkVec.x] && this.chunkList[endVec.chunkVec.x][endVec.chunkVec.z]){
+            let chunk = this.chunkList[endVec.chunkVec.x][endVec.chunkVec.z];
+            return chunk.getBlockType(new Vec3(endVec.relativeChunkVec.x, endVec.relativeChunkVec.y, endVec.relativeChunkVec.z));
+        }else{
+            //throw new Exception("ChunkNotFoundException", "Cannot found Chunk X: " + endVec.chunkVec.x + ", Z: " + endVec.chunkVec.z);
         }
     }
 
@@ -81,33 +92,12 @@ module.exports = class World {
                     }
                 }
 
-                for(let y = 0; y <= this.worldProperties.waterHeight; y++) {
+                /*for(let y = 0; y <= this.worldProperties.waterHeight; y++) {
                     if(chunk.getBlockType(new Vec3(x, y, z)) == 0){
                         chunk.setBlockType(new Vec3(x, y, z), 9);
                     }
-                }
-
-                /*
-                for(let objCount=0; objCount<this.worldObjecs[chunkX][chunkZ].length; objCount++){
-                    let obj = this.worldObjecs[chunkX][chunkZ][objCount];
-                    let x = obj.x;
-                    let z = obj.z;
-                    let y = this.data[chunkX][chunkZ][x][z];
-
-                    chunk.setBlockType(new Vec3(x, y+1, z), 17);
-                    chunk.setBlockType(new Vec3(x, y+2, z), 17);
-                    chunk.setBlockType(new Vec3(x, y+3, z), 17);
-                    chunk.setBlockType(new Vec3(x, y+4, z), 17);
-                    chunk.setBlockType(new Vec3(x, y+5, z), 17);
-
-                    for(let i=-2; i<2; i++){
-                        for(let i1=-2; i1<2; i1++){
-                            for(let i2=0; i2<3; i2++){
-                                chunk.setBlockType(new Vec3(x+i, y+4+i2, z+i1), 18);
-                            }
-                        }
-                    }
                 }*/
+
 
                 for (let y = 0; y < 256; y++) {
                     chunk.setSkyLight(new Vec3(x, y, z), 15)
@@ -115,7 +105,38 @@ module.exports = class World {
             }
         }
 
+
+        // Add Chunk to Chunk List
         this.chunkList[chunkX][chunkZ] = chunk;
+
+
+        // Generate all Chunk Overloading Stuff
+        for(let objCount=0; objCount<this.worldObjecs[chunkX][chunkZ].length; objCount++){
+            let obj = this.worldObjecs[chunkX][chunkZ][objCount];
+            let x = (chunkX * 16) + obj.x;
+            let z = (chunkZ * 16) + obj.z;
+            let y = this.data[chunkX][chunkZ][obj.x][obj.z];
+
+            if(this.getBlock(new Vec3(x, y+1, z)) == 9){
+                continue;
+            }
+
+            this.setBlock(new Vec3(x, y+1, z), new Block(17));
+            this.setBlock(new Vec3(x, y+2, z), new Block(17));
+            this.setBlock(new Vec3(x, y+3, z), new Block(17));
+            this.setBlock(new Vec3(x, y+4, z), new Block(17));
+            this.setBlock(new Vec3(x, y+5, z), new Block(17));
+
+            for(let i=-2; i<=2; i++){
+                for(let i1=-2; i1<=2; i1++){
+                    for(let i2=0; i2<3; i2++){
+                        this.setBlock(new Vec3(x+i, y+4+i2, z+i1), new Block(18));
+                    }
+                }
+            }
+        }
+
+
     }
 
 };

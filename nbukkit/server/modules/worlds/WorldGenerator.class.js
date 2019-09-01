@@ -2,7 +2,7 @@ const SimplexNoise = require("simplex-noise");
 const Biome = require("../worlds/Biome.class.js");
 
 class WorldGenerator{
-    constructor(world, seed = Math.floor(Math.random()*100000), seedMultipler = 1000000000, smooth = 0.3, flatness = 1, treeDensity = 3, treeDistance = 3){
+    constructor(world, seed = Math.floor(Math.random()*100000), seedMultipler = 1000000000, smooth = 0.3, flatness = 1, treeDensity = 10, treeDistance = 0){
         this.world = world;
         this.seed = seed;
         this.seedMultipler = seedMultipler;
@@ -64,8 +64,6 @@ class WorldGenerator{
             if(treePosZ<0){
                 treePosZ = Math.abs(treePosZ);
             }
-            treePosX = treePosX + 5;
-            treePosZ = treePosZ + 5;
 
             let checkDis = true;
 

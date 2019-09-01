@@ -40,6 +40,7 @@ module.exports = class ConnectionPlayer {
                 { type: 0, value: 127, key: 10 }
             ]
         });
+        /*if() Check Online / Offline Mode
         this.sendPacket("player_info", {
             action: 0,
             data: [{
@@ -54,7 +55,8 @@ module.exports = class ConnectionPlayer {
                 ping: this.client.latency,
                 displayName: this.player.displayname
             }]
-        });
+        });*/
+
     }
 
     sendChunk(chunkX, chunkZ, data, bitmap = 0xffff) {

@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "better-sqlite3": "^5.4.2",
     "minecraft-protocol": "^1.9.4",
     "prismarine-chunk": "^1.11.0",
     "simplex-noise": "^2.4.0",
