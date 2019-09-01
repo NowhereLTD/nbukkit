@@ -1,6 +1,6 @@
 const World = require("./World.class.js");
 const Vec3 = require("vec3");
-const Block = require("../block/Block.class.js");
+const Block = require("../material/block/Block.class.js");
 const SQLite=require("sqlite3");
 
 module.exports = class WorldManager {
