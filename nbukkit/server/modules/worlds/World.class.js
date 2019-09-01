@@ -8,10 +8,10 @@ const Block = require("../material/block/Block.class.js");
 module.exports = class World {
 
     constructor(name = "", db, worldProperties = {
-        "seed": 4897389578975,
+        "seed": 4098687348687834,
         "seedMultiplier": 1000000000,
         "smooth": 0.3,
-        "flatness": 1.5,
+        "flatness": 1.2,
         "treeDestiny": 5,
         "treeDistance": 5,
         "baseHeight": 50,
@@ -142,13 +142,25 @@ module.exports = class World {
                     }
                 }
 
-                for(let y = 0; y <= this.worldProperties.waterHeight; y++) {
-                    if(chunk.getBlockType(new Vec3(x, y, z)) == 0){
+                for(let y = this.worldProperties.waterHeight; y > this.data[chunkX][chunkZ][x][z]; y--) {
+                    if(chunk.getBlockType(new Vec3(x, y, z)) === 0){
+
+                        if(y - 1 >= 0) {
+                            if(chunk.getBlockType(new Vec3(x, y - 1, z)) !== 9 && chunk.getBlockType(new Vec3(x, y - 1, z)) !== 0) {
+                                chunk.setBlockType(new Vec3(x, y - 1, z), 13);
+                                chunk.setBlockType(new Vec3(x, y - 2, z), 13);
+                                chunk.setBlockType(new Vec3(x, y - 3, z), 13);
+                                chunk.setBlockType(new Vec3(x, y - 4, z), 13);
+                            }
+                        }
+
                         chunk.setBlockType(new Vec3(x, y, z), 9);
                     }
                 }
 
 
+
+                chunk.setBlockType(new Vec3(x, 0, z), 7);
                 for (let y = 0; y < 256; y++) {
                     chunk.setSkyLight(new Vec3(x, y, z), 15)
                 }
