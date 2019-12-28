@@ -1,8 +1,8 @@
-const mc = require('minecraft-protocol');
-const ConnectionManager = require('./modules/connection/ConnectionManager.class.js');
-const WorldManager = require('./modules/worlds/WorldManager.class.js');
-const EntityManager = require('./modules/entity/EntityManager.class');
-const ChatManager = require('./modules/chat/ChatManager.class');
+const mc = require("minecraft-protocol");
+const ConnectionManager = require("./modules/connection/ConnectionManager.class.js");
+const WorldManager = require("./modules/worlds/WorldManager.class.js");
+const EntityManager = require("./modules/entity/EntityManager.class");
+const ChatManager = require("./modules/chat/ChatManager.class");
 const Biome = require("./modules/worlds/Biome.class.js");
 
 module.exports = class Server {

@@ -1,4 +1,4 @@
-const ConnectionPlayer = require('./ConnectionPlayer.class.js');
+const ConnectionPlayer = require("./ConnectionPlayer.class.js");
 
 module.exports = class ConnectionManager {
 

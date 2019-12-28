@@ -1,7 +1,7 @@
-const fs = require('fs');
-const Block = require('./block/Block.class.js');
-const BlockState = require('./block/BlockState.class.js');
-const Variation = require('./Variation.class.js');
+const fs = require("fs");
+const Block = require("./block/Block.class.js");
+const BlockState = require("./block/BlockState.class.js");
+const Variation = require("./Variation.class.js");
 
 
 module.exports = class MaterialManager {

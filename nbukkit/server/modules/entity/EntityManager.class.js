@@ -1,5 +1,5 @@
-const Player = require('./Player.class.js');
-const Location = require('../worlds/Location.class');
+const Player = require("./Player.class.js");
+const Location = require("../worlds/Location.class");
 
 module.exports = class EntityManager {
 

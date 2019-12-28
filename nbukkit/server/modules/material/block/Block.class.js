@@ -1,4 +1,4 @@
-const Vec3 = require('vec3');
+const Vec3 = require("vec3");
 
 module.exports = class Block{
 
